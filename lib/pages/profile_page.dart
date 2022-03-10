@@ -220,6 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           );
         } else {
+          print(snapshot.error);
           print("uid: " + launcher.uid);
           return Loading();
         }
