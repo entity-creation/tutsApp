@@ -5,6 +5,7 @@ import '../models/message.dart';
 import 'message_widget.dart';
 import 'package:tuts_app/data.dart';
 
+//The uid you were putting was empty, and this was where the issue was
 class MessagesWidget extends StatelessWidget {
   final String uid;
 
@@ -15,41 +16,43 @@ class MessagesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => StreamBuilder<List<Message>>(
-    stream: FirebaseApi.getMessages(uid) as dynamic,
-    builder: (context, snapshot) {
-      switch (snapshot.connectionState) {
-        case ConnectionState.waiting:
-          return Center(child: Loading());
-        default:
-          if (snapshot.hasError) {
-            return buildText('Something Went Wrong Try later');
-          } else {
-            final messages = snapshot.data;
+        stream:
+            //The getmessage function should have a valid uid, not an empty string
+            FirebaseApi.getMessages("vFhIY1oiPNPMJL0lJxNhQfYhgXS2") as dynamic,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(child: Loading());
+            default:
+              if (snapshot.hasError) {
+                return buildText('Something Went Wrong Try later');
+              } else {
+                final messages = snapshot.data;
 
-            return messages!.isEmpty
-                ? buildText('Say Hi..')
-                : ListView.builder(
-              physics: BouncingScrollPhysics(),
-              reverse: true,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final message = messages[index];
+                return messages!.isEmpty
+                    ? buildText('Say Hi..')
+                    : ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        reverse: true,
+                        itemCount: messages.length,
+                        itemBuilder: (context, index) {
+                          final message = messages[index];
 
-                return MessageWidget(
-                  message: message,
-                  isMe: message.uid == myId,
-                );
-              },
-            );
+                          return MessageWidget(
+                            message: message,
+                            isMe: message.uid == myId,
+                          );
+                        },
+                      );
+              }
           }
-      }
-    },
-  );
+        },
+      );
 
   Widget buildText(String text) => Center(
-    child: Text(
-      text,
-      style: TextStyle(fontSize: 24),
-    ),
-  );
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 24),
+        ),
+      );
 }
