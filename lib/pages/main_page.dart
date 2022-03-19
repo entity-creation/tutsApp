@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tuts_app/screens/courseView.dart';
 
+import '../models/user.dart';
 
 class MySearchDelegate extends SearchDelegate {
-
   List<String> searchResults = [
     "Student",
     "Teacher",
@@ -12,9 +14,11 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget? buildLeading(BuildContext context) {
     IconButton(
-        icon: Icon(Icons.arrow_back),
+      icon: Icon(Icons.arrow_back),
       color: Colors.orange,
-      onPressed: () {close(context, null);},
+      onPressed: () {
+        close(context, null);
+      },
     );
     return null;
   }
@@ -25,7 +29,7 @@ class MySearchDelegate extends SearchDelegate {
       icon: Icon(Icons.clear),
       color: Colors.orange,
       onPressed: () {
-        if(query.isEmpty) {
+        if (query.isEmpty) {
           close(context, null);
         }
         query = '';
@@ -53,17 +57,17 @@ class MySearchDelegate extends SearchDelegate {
       return result.contains(input);
     }).toList();
     return ListView.builder(
-      itemCount: suggestions.length,
+        itemCount: suggestions.length,
         itemBuilder: (context, index) {
-        final suggestion = suggestions[index];
+          final suggestion = suggestions[index];
 
-        return ListTile(
-          title: Text(suggestion),
-          onTap: () {
-            query = suggestion;
-            showResults(context);
-          },
-        );
+          return ListTile(
+            title: Text(suggestion),
+            onTap: () {
+              query = suggestion;
+              showResults(context);
+            },
+          );
         });
   }
 }
@@ -78,30 +82,31 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
+    dynamic launcher = Provider.of<Tester?>(context);
+    List<dynamic> courses = ['Physics', 'Chemistry', 'Biology'];
     return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.orange,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(
-                      context: context,
-                      delegate: MySearchDelegate());
-                },
-              )
-            ],
-          ),
-          body: Center(
-            child: Text(
-              "Home",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
-            ),
-          ),
-        ));
+      appBar: AppBar(
+        backgroundColor: Colors.orange,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: MySearchDelegate());
+            },
+          )
+        ],
+      ),
+      body: Center(
+        child: ListView.builder(
+            itemCount: courses.length,
+            itemBuilder: ((context, index) {
+              return CourseView(
+                  courseName: courses[index],
+                  courseDesc: "Welcome to the course",
+                  uid: launcher.uid);
+            })),
+      ),
+    ));
   }
 }

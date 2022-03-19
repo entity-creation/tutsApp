@@ -4,6 +4,9 @@ import '../api/firebase_api.dart';
 import '../models/message.dart';
 import 'message_widget.dart';
 import 'package:tuts_app/data.dart';
+import 'package:provider/provider.dart';
+import 'package:tuts_app/services/auth.dart';
+import 'package:tuts_app/models/user.dart';
 
 //The uid you were putting was empty, and this was where the issue was
 class MessagesWidget extends StatelessWidget {
@@ -15,11 +18,13 @@ class MessagesWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => StreamBuilder<List<Message>>(
+  Widget build(BuildContext context){
+    dynamic launcher = Provider.of<Tester?>(context);
+    return StreamBuilder<List<Message>>(
         stream:
             //The getmessage function should have a valid uid, not an empty string
-            FirebaseApi.getMessages("vFhIY1oiPNPMJL0lJxNhQfYhgXS2") as dynamic,
-        builder: (context, snapshot) {
+            FirebaseApi.getMessages(launcher.uid) as dynamic,
+        builder:  (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return Center(child: Loading());
@@ -48,6 +53,7 @@ class MessagesWidget extends StatelessWidget {
           }
         },
       );
+}
 
   Widget buildText(String text) => Center(
         child: Text(

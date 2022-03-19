@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tuts_app/screens/studentCourse.dart';
+import 'package:tuts_app/screens/tutorCourse.dart';
 import 'package:tuts_app/services/auth.dart';
 import 'package:tuts_app/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,9 +13,7 @@ void main() async {
   await Firebase.initializeApp();
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.orange,
-    statusBarIconBrightness: Brightness.dark
-  ));
+      statusBarColor: Colors.orange, statusBarIconBrightness: Brightness.dark));
 
   runApp(const MyApp());
 }
@@ -29,7 +29,13 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Wrapper(uid: '',),
+        home: Wrapper(
+          uid: '',
+        ),
+        routes: {
+          "/studentCourse": (context) => StudentCourse(),
+          "/tutorCourse": (context) => TutorCourse(),
+        },
       ),
     );
   }
