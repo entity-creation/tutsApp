@@ -19,28 +19,31 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
-    extendBodyBehindAppBar: true,
-    backgroundColor: Colors.orange,
-    body: SafeArea(
-      child: Column(
-        children: [
-          ProfileHeaderWidget(name: widget.user.name),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.orange,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // ProfileHeaderWidget(name: widget.user.name),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
+                    ),
+                  ),
+                  child: MessagesWidget(uid: widget.user.uid),
                 ),
               ),
-              child: MessagesWidget(uid: widget.user.uid),
-            ),
+              NewMessageWidget(
+                uid: widget.user.uid,
+                username: widget.user.name,
+              )
+            ],
           ),
-          NewMessageWidget(uid: widget.user.uid)
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 }

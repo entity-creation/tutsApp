@@ -6,29 +6,27 @@ import '../screens/chat_header.dart';
 import '../screens/chat_body.dart';
 
 class ChatsPage extends StatelessWidget {
-  const ChatsPage({Key? key, MainUser? users, MainUser? user}) : super(key: key);
+  const ChatsPage({Key? key, MainUser? users, MainUser? user})
+      : super(key: key);
 
   Widget buildText(String text) => Center(
-    child: Text(
-      text,
-      style: TextStyle(fontSize: 24, color: Colors.white),
-    ),
-  );
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 24, color: Colors.orange),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: StreamBuilder<List<MainUser>> (
+        child: StreamBuilder<List<MainUser>>(
             stream: FirebaseApi.getUsers(),
             builder: (context, snapshot) {
-
               switch (snapshot.connectionState) {
-
                 case ConnectionState.waiting:
                   return Center(child: Loading());
                 default:
-
                   if (snapshot.hasError) {
                     print(snapshot.error);
                     return buildText('Something Went Wrong Try Again later');
@@ -45,7 +43,6 @@ class ChatsPage extends StatelessWidget {
                         ],
                       );
                     }
-
                   }
               }
             }),
@@ -53,4 +50,3 @@ class ChatsPage extends StatelessWidget {
     );
   }
 }
-

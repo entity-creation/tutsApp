@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tuts_app/models/user.dart';
+import 'package:tuts_app/pages/profile_page.dart';
 import 'package:tuts_app/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:tuts_app/shared/loading.dart';
@@ -11,7 +12,7 @@ class CheckBoxState {
   CheckBoxState({
     required this.title,
     this.val = false,
-});
+  });
 }
 
 class DropDownItems {
@@ -19,9 +20,8 @@ class DropDownItems {
 
   DropDownItems({
     required this.faculties,
-});
+  });
 }
-
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -31,7 +31,6 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-
   final studies = [
     CheckBoxState(title: "Physics"),
     CheckBoxState(title: "Chemistry"),
@@ -53,7 +52,7 @@ class _EditProfileState extends State<EditProfile> {
 
   dynamic gender = 1;
   dynamic school = 1;
-  dynamic userAvatar = '';
+  dynamic userAvatar = ProfilePage().imageUrl;
   dynamic messageTime = '';
 
   List<dynamic> faculty = ['Physics', 'Chemistry', 'Biology'];
@@ -64,7 +63,6 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-
     dynamic launcher = Provider.of<Tester?>(context);
 
     String naming = nameController.text;
@@ -94,16 +92,15 @@ class _EditProfileState extends State<EditProfile> {
                   elevation: 0,
                   title: Text(
                     "Edit Profile",
-                    style: TextStyle(
-                        color: Colors.orange
-                    ),
+                    style: TextStyle(color: Colors.orange),
                   ),
                   leading: IconButton(
                     color: Colors.orange,
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
                       Navigator.pop(context);
-                    },),
+                    },
+                  ),
                 ),
                 body: SingleChildScrollView(
                   child: Padding(
@@ -117,8 +114,7 @@ class _EditProfileState extends State<EditProfile> {
                             validator: (value) {
                               if (value!.length < 4) {
                                 return "Enter your name";
-                              }
-                              else {
+                              } else {
                                 return null;
                               }
                             },
@@ -128,14 +124,11 @@ class _EditProfileState extends State<EditProfile> {
                                 prefixIcon: Icon(Icons.perm_identity,
                                     color: Colors.orange),
                                 labelText: 'Full Name',
-                                labelStyle: TextStyle(
-                                    color: Colors.grey
-                                ),
+                                labelStyle: TextStyle(color: Colors.grey),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 2, color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(15)
-                                ),
+                                    borderRadius: BorderRadius.circular(15)),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.orange),
@@ -145,12 +138,12 @@ class _EditProfileState extends State<EditProfile> {
                           SizedBox(height: 20),
                           TextFormField(
                             validator: (value) {
-                              const pattern = r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$';
+                              const pattern =
+                                  r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$';
                               final regExp = RegExp(pattern);
                               if (value!.isEmpty || !regExp.hasMatch(value)) {
                                 return "Enter valid phone number";
-                              }
-                              else {
+                              } else {
                                 return null;
                               }
                             },
@@ -160,28 +153,23 @@ class _EditProfileState extends State<EditProfile> {
                                 prefixIcon: const Icon(Icons.phone,
                                     color: Colors.orange),
                                 labelText: 'Phone Number',
-                                labelStyle: TextStyle(
-                                    color: Colors.grey
-                                ),
+                                labelStyle: TextStyle(color: Colors.grey),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 2, color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(15)
-                                ),
+                                    borderRadius: BorderRadius.circular(15)),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.orange),
                                   borderRadius: BorderRadius.circular(15),
-                                )
-                            ),
+                                )),
                           ),
                           SizedBox(height: 20),
                           TextFormField(
                             validator: (value) {
                               if (value!.length < 6) {
                                 return "Enter home address";
-                              }
-                              else {
+                              } else {
                                 return null;
                               }
                             },
@@ -191,20 +179,16 @@ class _EditProfileState extends State<EditProfile> {
                                 prefixIcon: const Icon(Icons.house,
                                     color: Colors.orange),
                                 labelText: 'Address',
-                                labelStyle: TextStyle(
-                                    color: Colors.grey
-                                ),
+                                labelStyle: TextStyle(color: Colors.grey),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 2, color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(15)
-                                ),
+                                    borderRadius: BorderRadius.circular(15)),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       width: 2, color: Colors.orange),
                                   borderRadius: BorderRadius.circular(15),
-                                )
-                            ),
+                                )),
                           ),
                           SizedBox(height: 20),
                           Column(
@@ -332,79 +316,89 @@ class _EditProfileState extends State<EditProfile> {
                             ],
                           ),
                           SizedBox(height: 10),
-                          (mainUser!.function == 2) ?
-                          Column(
-                            children: [
-                              Text(
-                                  "Faculty",
-                                  style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      color: Colors.orange,
-                                      width: 2
-                                  )
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<DropDownItems>(
-                                      isExpanded: true,
-                                      hint: Text(facultyName[0].faculties),
-                                      value: selectedFaculty,
-                                      items: facultyName.map((DropDownItems value) {
-                                        return DropdownMenuItem<DropDownItems>(
-                                            value: value,
-                                            child: Text(value.faculties));
-                                      }).toList(),
-                                      onChanged: (DropDownItems? value) {
-                                        setState(() {
-                                          selectedFaculty = value;
-                                          print(selectedFaculty?.faculties);
-                                        });
-                                      }),
-                                ),
-                              ),
-                              SizedBox(height: 20),
-                              Text(
-                                  "Courses",
-                                  style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              ...studies.map(buildSingleCheckBox).toList(),
-                            ],
-                          ) : (mainUser.function == 1) ? Column(
-                            children: [
-                              CheckboxListTile(
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  activeColor: Colors.orange,
-                                  title: Text("One"),
-                                  value: val,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      val = val!;
-                                    });
-                                  }),
-                              SizedBox(height: 10),
-                              CheckboxListTile(
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  activeColor: Colors.orange,
-                                  title: Text("One"),
-                                  value: val,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      val = val!;
-                                    });
-                                  }),
-                            ],
-                          ) : Text("Admin"),
+                          (mainUser!.function == 2)
+                              ? Column(
+                                  children: [
+                                    Text(
+                                      "Faculty",
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          border: Border.all(
+                                              color: Colors.orange, width: 2)),
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton<DropDownItems>(
+                                            isExpanded: true,
+                                            hint:
+                                                Text(facultyName[0].faculties),
+                                            value: selectedFaculty,
+                                            items: facultyName
+                                                .map((DropDownItems value) {
+                                              return DropdownMenuItem<
+                                                      DropDownItems>(
+                                                  value: value,
+                                                  child: Text(value.faculties));
+                                            }).toList(),
+                                            onChanged: (DropDownItems? value) {
+                                              setState(() {
+                                                selectedFaculty = value;
+                                                print(
+                                                    selectedFaculty?.faculties);
+                                              });
+                                            }),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      "Courses",
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    ...studies
+                                        .map(buildSingleCheckBox)
+                                        .toList(),
+                                  ],
+                                )
+                              : (mainUser.function == 1)
+                                  ? Column(
+                                      children: [
+                                        CheckboxListTile(
+                                            controlAffinity:
+                                                ListTileControlAffinity.leading,
+                                            activeColor: Colors.orange,
+                                            title: Text("One"),
+                                            value: val,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                val = val!;
+                                              });
+                                            }),
+                                        SizedBox(height: 10),
+                                        CheckboxListTile(
+                                            controlAffinity:
+                                                ListTileControlAffinity.leading,
+                                            activeColor: Colors.orange,
+                                            title: Text("One"),
+                                            value: val,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                val = val!;
+                                              });
+                                            }),
+                                      ],
+                                    )
+                                  : Text("Admin"),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(250, 40),
@@ -415,22 +409,23 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                await DatabaseService(uid: launcher.uid).updateUserData(
-                                    naming,
-                                    numbering,
-                                    addressing,
-                                    gender,
-                                    userAvatar,
-                                    messageTime,
-                                    school,
-                                    faculty,
-                                    courses);
+                                await DatabaseService(uid: launcher.uid)
+                                    .updateUserData(
+                                        naming,
+                                        numbering,
+                                        addressing,
+                                        gender,
+                                        school,
+                                        userAvatar,
+                                        messageTime,
+                                        faculty,
+                                        courses);
                                 Navigator.pop(context);
                               }
                             },
                             child: Text(
-                                'Submit',
-                                style: TextStyle(fontSize: 20),
+                              'Submit',
+                              style: TextStyle(fontSize: 20),
                             ),
                           )
                         ],
@@ -443,7 +438,6 @@ class _EditProfileState extends State<EditProfile> {
           } else {
             return Loading();
           }
-        }
-    );
+        });
   }
-  }
+}

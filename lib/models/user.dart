@@ -18,7 +18,7 @@ class MainUser {
   final int gender;
   final int function;
   final String urlAvatar;
-  final String? lastMessageTime;
+  final DateTime? lastMessageTime;
   final List<dynamic> faculty;
   final List<dynamic> courses;
 
@@ -60,11 +60,11 @@ class MainUser {
       );
 
   static MainUser fromJson(Map<String, dynamic> json) => MainUser(
-        uid: json['uid'],
-        name: json['name'],
+        uid: 'UID',
+        name: json['Name'],
         urlAvatar: json['urlAvatar'],
-        // lastMessageTime: Utils.toDateTime(json['lastMessageTime']),
-        lastMessageTime: json['lastMessageTime'],
+        lastMessageTime: Utils.toDateTime(json['lastMessageTime']) as DateTime,
+        // lastMessageTime: json['lastMessageTime'],
         number: json['number'],
         address: json['address'],
         function: json['function'],
@@ -77,8 +77,8 @@ class MainUser {
         'uid': uid,
         'name': name,
         'urlAvatar': urlAvatar,
-        // 'lastMessageTime': Utils.fromDateTimeToJson(lastMessageTime!),
-        'lastMessageTime': lastMessageTime,
+        'lastMessageTime': Utils.fromDateTimeToJson(lastMessageTime!),
+        // 'lastMessageTime': lastMessageTime,
         'number': number,
         'address': address,
         'function': function,

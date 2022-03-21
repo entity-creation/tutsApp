@@ -5,10 +5,9 @@ import 'package:tuts_app/pages/profile_page.dart';
 import 'package:tuts_app/pages/main_page.dart';
 import 'package:tuts_app/services/database.dart';
 import 'package:provider/provider.dart';
-import '../chat_page.dart';
+import 'package:tuts_app/pages/chats_page.dart';
 
 class Home extends StatefulWidget {
-
   final String uid;
   const Home({Key? key, required this.uid}) : super(key: key);
 
@@ -17,17 +16,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   int indexing = 0;
 
   dynamic screens = [
     MainPage(),
-    ChatPage(user: MainUser(name: '',
-        lastMessageTime: null,
-        urlAvatar: '', number: '',
-        gender: 0, address: '',
-        uid: '', function: 0,
-        courses: [], faculty: [])),
+    ChatsPage(),
     ProfilePage(),
   ];
 
@@ -71,11 +64,10 @@ class _HomeState extends State<Home> {
                 icon: Icon(Icons.person),
                 label: "Profile",
               ),
-            ],),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-

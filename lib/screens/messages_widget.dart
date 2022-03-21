@@ -18,42 +18,42 @@ class MessagesWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     dynamic launcher = Provider.of<Tester?>(context);
     return StreamBuilder<List<Message>>(
-        stream:
-            //The getmessage function should have a valid uid, not an empty string
-            FirebaseApi.getMessages(launcher.uid) as dynamic,
-        builder:  (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: Loading());
-            default:
-              if (snapshot.hasError) {
-                return buildText('Something Went Wrong Try later');
-              } else {
-                final messages = snapshot.data;
+      stream:
+          //The getmessage function should have a valid uid, not an empty string
+          FirebaseApi.getMessages(launcher.uid) as dynamic,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return Center(child: Loading());
+          default:
+            if (snapshot.hasError) {
+              return buildText('Something Went Wrong Try later');
+            } else {
+              final messages = snapshot.data;
 
-                return messages!.isEmpty
-                    ? buildText('Say Hi..')
-                    : ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        reverse: true,
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) {
-                          final message = messages[index];
+              return messages!.isEmpty
+                  ? buildText('Say Hi..')
+                  : ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      reverse: true,
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final message = messages[index];
 
-                          return MessageWidget(
-                            message: message,
-                            isMe: message.uid == myId,
-                          );
-                        },
-                      );
-              }
-          }
-        },
-      );
-}
+                        return MessageWidget(
+                          message: message,
+                          isMe: message.recUid == myId,
+                        );
+                      },
+                    );
+            }
+        }
+      },
+    );
+  }
 
   Widget buildText(String text) => Center(
         child: Text(

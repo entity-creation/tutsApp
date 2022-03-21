@@ -8,6 +8,7 @@ import 'package:tuts_app/models/info.dart';
 import 'package:tuts_app/models/user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as Path;
+import 'package:tuts_app/services/utils.dart';
 
 class DatabaseService {
   final String uid;
@@ -24,7 +25,7 @@ class DatabaseService {
       int gender,
       int function,
       String urlAvatar,
-      String lastMessageTime,
+      DateTime lastMessageTime,
       List<dynamic> faculty,
       List<dynamic> courses) async {
     return await userData.doc(uid).set({
@@ -52,7 +53,7 @@ class DatabaseService {
         faculty: snapshot['Faculty'],
         courses: snapshot['Courses'],
         urlAvatar: snapshot['urlAvatar'],
-        lastMessageTime: snapshot['lastMessageTime']);
+        lastMessageTime: Utils.toDateTime(snapshot['lastMessageTime']));
   }
 
   //List from snapshot
@@ -148,5 +149,21 @@ class DatabaseService {
     await file.writeAsBytes(bytes);
 
     return file;
+  }
+
+  Future<String> uploadImage(File? file, String uid, String fileName) async {
+    String url = "";
+    bool status;
+    Reference reference = FirebaseStorage.instance.ref().child(uid);
+
+    UploadTask uploadTask = reference.putFile(
+        file!,
+        SettableMetadata(
+            customMetadata: {"uploaded_by": uid, "fileName": fileName}));
+    await uploadTask.whenComplete(() => {status = true});
+    reference.getDownloadURL().then((value) {
+      url = value;
+    });
+    return url;
   }
 }

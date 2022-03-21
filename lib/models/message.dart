@@ -6,6 +6,7 @@ class MessageField {
 
 class Message {
   final String uid;
+  final String recUid;
   final String urlAvatar;
   final String name;
   final String message;
@@ -13,6 +14,7 @@ class Message {
 
   const Message({
     required this.uid,
+    required this.recUid,
     required this.urlAvatar,
     required this.name,
     required this.message,
@@ -20,18 +22,20 @@ class Message {
   });
 
   static Message fromJson(Map<String, dynamic> json) => Message(
-    uid: json['uid'],
-    urlAvatar: json['urlAvatar'],
-    name: json['name'],
-    message: json['message'],
-    createdAt: Utils.toDateTime(json['createdAt']),
-  );
+        uid: json['uid'],
+        recUid: json['recUid'],
+        urlAvatar: json['urlAvatar'],
+        name: json['name'],
+        message: json['message'],
+        createdAt: Utils.toDateTime(json['createdAt']),
+      );
 
   Map<String, dynamic> toJson() => {
-    'uid': uid,
-    'urlAvatar': urlAvatar,
-    'name': name,
-    'message': message,
-    'createdAt': Utils.fromDateTimeToJson(createdAt!),
-  };
+        'uid': uid,
+        'recUid': recUid,
+        'urlAvatar': urlAvatar,
+        'name': name,
+        'message': message,
+        'createdAt': Utils.fromDateTimeToJson(createdAt!),
+      };
 }
