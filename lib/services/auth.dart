@@ -47,6 +47,7 @@ class AuthService {
       User? user = result.user;
 
       await DatabaseService(uid: user!.uid).updateUserData(
+          user.uid,
           nameController,
           numberController,
           addressController,

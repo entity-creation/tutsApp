@@ -60,7 +60,7 @@ class MainUser {
       );
 
   static MainUser fromJson(Map<String, dynamic> json) => MainUser(
-        uid: 'UID',
+        uid: json['uid'],
         name: json['Name'],
         urlAvatar: json['urlAvatar'],
         lastMessageTime: Utils.toDateTime(json['lastMessageTime']) as DateTime,

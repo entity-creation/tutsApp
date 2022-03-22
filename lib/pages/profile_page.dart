@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuts_app/models/user.dart';
 import 'package:tuts_app/pages/edit_profile.dart';
 import 'package:tuts_app/services/auth.dart';
@@ -10,6 +11,7 @@ import 'package:tuts_app/shared/loading.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tuts_app/shared/sharedPref.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -23,12 +25,27 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String uid = "";
 
+  SharedPreferences? preferences;
+
+  @override
+  void initState() {
+    super.initState();
+    instantiatePref().whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  Future<void> instantiatePref() async {
+    preferences = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
     final launcher = Provider.of<Tester?>(context);
     dynamic database = DatabaseService(uid: launcher!.uid);
     uid = launcher.uid;
+    SharedPref pref;
 
     dynamic faculties = List<DropDownItems>;
 
@@ -324,9 +341,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     title: Text('Gallery'),
                     onTap: () async {
                       getGalleryImageTwo();
-                      widget.Myurl = await DatabaseService(uid: uid)
-                          .uploadImage(imageTwo, uid,
-                              "$uid/${basename(imageTwo!.path)}");
                     },
                   )
                 ],
@@ -390,6 +404,11 @@ class _ProfilePageState extends State<ProfilePage> {
       if (imageTwo == null) return;
 
       final profileImage = await saveProfileImage(imageTwo.path);
+      widget.Myurl = await DatabaseService(uid: uid).uploadImage(
+          profileImage, uid, "$uid/${basename(profileImage!.path)}");
+
+      this.preferences = await SharedPreferences.getInstance();
+      this.preferences!.setString("profileUrl", widget.Myurl);
       setState(() {
         this.imageTwo = profileImage;
       });
@@ -405,9 +424,15 @@ class _ProfilePageState extends State<ProfilePage> {
       if (imageTwo == null) return;
 
       final profileImage = await saveProfileImage(imageTwo.path);
+      widget.Myurl = await DatabaseService(uid: uid).uploadImage(
+          profileImage, uid, "$uid/${basename(profileImage!.path)}");
+
+      this.preferences = await SharedPreferences.getInstance();
+      this.preferences!.setString("profileUrl", widget.Myurl);
       setState(() {
         this.imageTwo = profileImage;
       });
+      print(preferences!.getString("profileUrl"));
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }

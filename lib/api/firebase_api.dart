@@ -11,10 +11,16 @@ class FirebaseApi {
       .snapshots()
       .transform(Utils.transformer(MainUser.fromJson));
 
-  static Future uploadMessage(String idUser, String recUid, String username,
-      String message, String imageUrl, DateTime dateSent) async {
+  static Future uploadMessage(
+      String groupId,
+      String idUser,
+      String recUid,
+      String username,
+      String message,
+      String imageUrl,
+      DateTime dateSent) async {
     final refMessages =
-        FirebaseFirestore.instance.collection('chats/$idUser/messages');
+        FirebaseFirestore.instance.collection('chats/$groupId/messages');
 
     final newMessage = Message(
       uid: idUser,

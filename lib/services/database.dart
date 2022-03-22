@@ -17,8 +17,11 @@ class DatabaseService {
   //collection reference
   final CollectionReference userData =
       FirebaseFirestore.instance.collection('User');
+  final CollectionReference idRef =
+      FirebaseFirestore.instance.collection('UserId');
 
   Future updateUserData(
+      String uid,
       String name,
       String number,
       String address,
@@ -29,6 +32,7 @@ class DatabaseService {
       List<dynamic> faculty,
       List<dynamic> courses) async {
     return await userData.doc(uid).set({
+      'uid': uid,
       'Name': name,
       'Phone Number': number,
       'Address': address,
@@ -39,6 +43,10 @@ class DatabaseService {
       'urlAvatar': urlAvatar,
       'lastMessageTime': lastMessageTime,
     });
+  }
+
+  Future uploadIds(String userId) async {
+    await idRef.doc(uid).set({"userId": userId});
   }
 
   //User data from snapshot
@@ -154,16 +162,14 @@ class DatabaseService {
   Future<String> uploadImage(File? file, String uid, String fileName) async {
     String url = "";
     bool status;
-    Reference reference = FirebaseStorage.instance.ref().child(uid);
+    Reference reference = FirebaseStorage.instance.ref().child("Images/$uid");
 
     UploadTask uploadTask = reference.putFile(
         file!,
         SettableMetadata(
             customMetadata: {"uploaded_by": uid, "fileName": fileName}));
     await uploadTask.whenComplete(() => {status = true});
-    reference.getDownloadURL().then((value) {
-      url = value;
-    });
+    url = await reference.getDownloadURL();
     return url;
   }
 }

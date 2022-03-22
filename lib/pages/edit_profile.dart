@@ -53,7 +53,7 @@ class _EditProfileState extends State<EditProfile> {
   dynamic gender = 1;
   dynamic school = 1;
   dynamic userAvatar = ProfilePage().imageUrl;
-  dynamic messageTime = '';
+  dynamic messageTime = DateTime.now();
 
   List<dynamic> faculty = ['Physics', 'Chemistry', 'Biology'];
   List<dynamic> courses = ['Physics', 'Chemistry', 'Biology'];
@@ -411,6 +411,7 @@ class _EditProfileState extends State<EditProfile> {
                               if (_formKey.currentState!.validate()) {
                                 await DatabaseService(uid: launcher.uid)
                                     .updateUserData(
+                                        launcher.uid,
                                         naming,
                                         numbering,
                                         addressing,

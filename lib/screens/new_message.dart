@@ -23,13 +23,19 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
   String message = '';
   String uid = "";
   String url = ProfilePage().imageUrl;
+  String groupId = "";
 
-  void sendMessage(String sennderUid, String receiverUid, String username,
+  void sendMessage(String senderUid, String receiverUid, String username,
       String message, String imageUrl, DateTime dateSent) async {
     FocusScope.of(context).unfocus();
+    if (senderUid.hashCode <= receiverUid.hashCode) {
+      groupId = "$senderUid-$receiverUid";
+    } else {
+      groupId = "$receiverUid-$senderUid";
+    }
 
     await FirebaseApi.uploadMessage(
-        sennderUid, receiverUid, username, message, imageUrl, dateSent);
+        groupId, senderUid, receiverUid, username, message, imageUrl, dateSent);
 
     _controller.clear();
   }

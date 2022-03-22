@@ -19,11 +19,19 @@ class MessagesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String groupId = "";
+
     dynamic launcher = Provider.of<Tester?>(context);
+    if (launcher.uid.hashCode <= uid.hashCode) {
+      groupId = "${launcher.uid}-$uid";
+    } else {
+      groupId = "$uid-${launcher.uid}";
+    }
+    print("${launcher.uid}-$uid");
     return StreamBuilder<List<Message>>(
       stream:
           //The getmessage function should have a valid uid, not an empty string
-          FirebaseApi.getMessages(launcher.uid) as dynamic,
+          FirebaseApi.getMessages(groupId) as dynamic,
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -45,7 +53,7 @@ class MessagesWidget extends StatelessWidget {
 
                         return MessageWidget(
                           message: message,
-                          isMe: message.recUid == myId,
+                          isMe: message.uid == launcher.uid,
                         );
                       },
                     );
