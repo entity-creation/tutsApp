@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'pdfLanding.dart';
 
 class StudentCourse extends StatefulWidget {
-  const StudentCourse({Key? key}) : super(key: key);
+  final String courseName;
+  const StudentCourse({required this.courseName, Key? key}) : super(key: key);
 
   @override
   State<StudentCourse> createState() => _StudentCourseState();
@@ -16,7 +17,7 @@ class _StudentCourseState extends State<StudentCourse> {
       appBar: AppBar(
         backgroundColor: Colors.orange,
       ),
-      body: PdfLanding(),
+      body: PdfLanding(courseName: widget.courseName),
     );
   }
 }

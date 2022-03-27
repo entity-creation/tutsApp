@@ -12,6 +12,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tuts_app/shared/sharedPref.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -47,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
     uid = launcher.uid;
     SharedPref pref;
 
-    dynamic faculties = List<DropDownItems>;
+    List courses = [];
 
     final top = coverHeight - profileHeight / 2;
     final bottom = profileHeight / 2;
@@ -59,6 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
             MainUser? mainUser = snapshot.data;
             String function = mainUser!.function.toString();
             String gender = mainUser.gender.toString();
+            courses = mainUser.courses;
             if (function == '1') {
               function = 'Teacher';
             } else if (function == '2') {
@@ -195,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   label: Text('Add Faculty'),
                                   icon: Icon(Icons.add),
                                   onPressed: () {
-                                    _addFaculty();
+                                    _addDept();
                                   },
                                 ),
                                 SizedBox(height: 10),
@@ -212,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ],
                             )
                           : (function == 'Student')
-                              ? Text(faculties.toString())
+                              ? Text(courses.toString())
                               : Text("Nothing to show"),
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
@@ -472,10 +474,10 @@ class _ProfilePageState extends State<ProfilePage> {
         color: Colors.pink,
       );
 
-  final facultyController = TextEditingController();
+  final deptController = TextEditingController();
   final courseController = TextEditingController();
 
-  void _addFaculty() {
+  void _addDept() {
     showModalBottomSheet(
         isScrollControlled: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
@@ -499,10 +501,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       }
                     },
                     keyboardType: TextInputType.text,
-                    controller: facultyController,
+                    controller: deptController,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.book, color: Colors.orange),
-                        labelText: 'Faculty',
+                        labelText: 'Department',
                         labelStyle: TextStyle(color: Colors.grey),
                         hintStyle: TextStyle(
                           color: Colors.grey,
@@ -520,7 +522,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 10),
                   ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(primary: Colors.orange),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await DatabaseService(uid: uid)
+                            .uploadDept(deptController.text);
+                        Fluttertoast.showToast(
+                            msg: "Successfully added department",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER);
+                        deptController.clear();
+                      },
                       icon: Icon(Icons.upload),
                       label: Text('Upload')),
                 ],
@@ -575,7 +585,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 10),
                   ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(primary: Colors.orange),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await DatabaseService(uid: uid)
+                            .uploadCourse(courseController.text);
+                        Fluttertoast.showToast(
+                            msg: "Successfully added course",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER);
+                        courseController.clear();
+                      },
                       icon: Icon(Icons.upload),
                       label: Text('Upload')),
                 ],

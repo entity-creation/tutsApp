@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuts_app/screens/courseView.dart';
+import 'package:tuts_app/services/database.dart';
 
 import '../models/user.dart';
 
@@ -83,30 +84,50 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     dynamic launcher = Provider.of<Tester?>(context);
-    List<dynamic> courses = ['Physics', 'Chemistry', 'Biology'];
-    return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              showSearch(context: context, delegate: MySearchDelegate());
-            },
-          )
-        ],
-      ),
-      body: Center(
-        child: ListView.builder(
-            itemCount: courses.length,
-            itemBuilder: ((context, index) {
-              return CourseView(
-                  courseName: courses[index],
-                  courseDesc: "Welcome to the course",
-                  uid: launcher.uid);
-            })),
-      ),
-    ));
+    List<dynamic> courses = [];
+    return StreamBuilder<MainUser>(
+      stream: DatabaseService(uid: launcher.uid).oneUser,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          MainUser? data = snapshot.data;
+          List courseList = data!.courses;
+          if (courses.isEmpty) {
+            courseList.forEach((element) {
+              courses.add(element);
+            });
+          } else {
+            courses.clear();
+            courseList.forEach((element) {
+              courses.add(element);
+            });
+          }
+        }
+        return SafeArea(
+            child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.orange,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  showSearch(context: context, delegate: MySearchDelegate());
+                },
+              )
+            ],
+          ),
+          body: Center(
+            child: ListView.builder(
+                itemCount: courses.length,
+                itemBuilder: ((context, index) {
+                  return CourseView(
+                    courseName: courses[index],
+                    courseDesc: "Welcome to the course",
+                    uid: launcher.uid,
+                  );
+                })),
+          ),
+        ));
+      },
+    );
   }
 }

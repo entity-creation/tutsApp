@@ -14,7 +14,8 @@ import 'package:path/path.dart' as path;
 import 'pdfLanding.dart';
 
 class TutorCourse extends StatefulWidget {
-  const TutorCourse({Key? key}) : super(key: key);
+  final String courseName;
+  const TutorCourse({required this.courseName, Key? key}) : super(key: key);
 
   @override
   State<TutorCourse> createState() => _TutorCourseState();
@@ -50,8 +51,8 @@ class _TutorCourseState extends State<TutorCourse> {
     });
     if (files?.length != 0) {
       for (var file in files!) {
-        DatabaseService(uid: uid).uploadPdf(
-            file, "Physics", uid, path.basenameWithoutExtension(file.path));
+        DatabaseService(uid: uid).uploadPdf(file, widget.courseName, uid,
+            path.basenameWithoutExtension(file.path));
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Success uploading file"),
@@ -90,7 +91,9 @@ class _TutorCourseState extends State<TutorCourse> {
       appBar: AppBar(
         backgroundColor: Colors.orange,
       ),
-      body: PdfLanding(),
+      body: PdfLanding(
+        courseName: widget.courseName,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           getFiles(launcher.uid);

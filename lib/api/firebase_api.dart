@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tuts_app/models/courses.dart';
 import 'package:tuts_app/models/user.dart';
 import 'package:tuts_app/services/utils.dart';
 import '../models/message.dart';
@@ -44,6 +45,13 @@ class FirebaseApi {
           .orderBy(MessageField.createdAt, descending: true)
           .snapshots()
           .transform(Utils.transformer(Message.fromJson));
+
+  static Stream<List<Dept>> getDept() => FirebaseFirestore.instance
+      .collection("departments")
+      .doc("allDepartments")
+      .collection("courses")
+      .snapshots()
+      .transform(Utils.transformer(Dept.fromJson));
 
   static Future addRandomUsers(List<MainUser> users) async {
     final refUsers = FirebaseFirestore.instance.collection('User');

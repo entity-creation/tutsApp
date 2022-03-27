@@ -32,10 +32,10 @@ class MyApp extends StatelessWidget {
         home: Wrapper(
           uid: '',
         ),
-        routes: {
-          "/studentCourse": (context) => StudentCourse(),
-          "/tutorCourse": (context) => TutorCourse(),
-        },
+        // routes: {
+        //   "/studentCourse": (context) => StudentCourse(),
+        //   "/tutorCourse": (context) => TutorCourse(),
+        // },
       ),
     );
   }

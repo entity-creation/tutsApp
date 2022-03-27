@@ -10,7 +10,8 @@ import 'package:tuts_app/shared/loading.dart';
 import 'package:flutter_pdf_viewer/flutter_pdf_viewer.dart';
 
 class PdfLanding extends StatefulWidget {
-  const PdfLanding({Key? key}) : super(key: key);
+  final String courseName;
+  const PdfLanding({required this.courseName, Key? key}) : super(key: key);
 
   @override
   State<PdfLanding> createState() => _PdfLandingState();
@@ -31,7 +32,7 @@ class _PdfLandingState extends State<PdfLanding> {
                 itemBuilder: (context, index) {
                   Map<String, dynamic> file = snapshot.data![index];
 
-                  if (file["description"].toString() == "Physics") {
+                  if (file["description"].toString() == widget.courseName) {
                     return Card(
                       child: ListTile(
                         dense: false,
@@ -50,7 +51,12 @@ class _PdfLandingState extends State<PdfLanding> {
                       ),
                     );
                   }
-                  return Loading();
+                  return Center(
+                    child: Text(
+                      "No material uploaded",
+                      style: TextStyle(color: Colors.orange),
+                    ),
+                  );
                 });
           } else {
             print(snapshot.error);

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tuts_app/screens/studentCourse.dart';
+import 'package:tuts_app/screens/tutorCourse.dart';
 import 'package:tuts_app/services/database.dart';
 import 'package:tuts_app/shared/loading.dart';
 
@@ -17,11 +19,17 @@ class CourseView extends StatelessWidget {
 
   void courseClicked(dynamic function, BuildContext context) {
     if (function == '1') {
-      Navigator.pushNamed(context, "/tutorCourse");
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return TutorCourse(courseName: courseName);
+      }));
     } else if (function == "2") {
-      Navigator.pushNamed(context, "/studentCourse");
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return StudentCourse(courseName: courseName);
+      }));
     } else {
-      Loading();
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return StudentCourse(courseName: courseName);
+      }));
     }
   }
 

@@ -37,6 +37,14 @@ class _EditProfileState extends State<EditProfile> {
     CheckBoxState(title: "Biology"),
   ];
 
+  final List<String> dept = [
+    "Software Engineering",
+    "Computer Science",
+    "Information Technology"
+  ];
+  String selFaculty = "Software Engineering";
+  List listfaculty = [];
+
   DropDownItems? selectedFaculty;
   List<DropDownItems> facultyName = <DropDownItems>[
     DropDownItems(faculties: "Science"),
@@ -56,7 +64,7 @@ class _EditProfileState extends State<EditProfile> {
   dynamic messageTime = DateTime.now();
 
   List<dynamic> faculty = ['Physics', 'Chemistry', 'Biology'];
-  List<dynamic> courses = ['Physics', 'Chemistry', 'Biology'];
+  List<dynamic> courses = [];
 
   String? values;
   bool val = false;
@@ -77,6 +85,9 @@ class _EditProfileState extends State<EditProfile> {
         onChanged: (value) {
           setState(() {
             checkbox.val = value!;
+            if (checkbox.val) {
+              courses.add(checkbox.title);
+            }
           });
         });
 
@@ -336,25 +347,24 @@ class _EditProfileState extends State<EditProfile> {
                                           border: Border.all(
                                               color: Colors.orange, width: 2)),
                                       child: DropdownButtonHideUnderline(
-                                        child: DropdownButton<DropDownItems>(
-                                            isExpanded: true,
-                                            hint:
-                                                Text(facultyName[0].faculties),
-                                            value: selectedFaculty,
-                                            items: facultyName
-                                                .map((DropDownItems value) {
-                                              return DropdownMenuItem<
-                                                      DropDownItems>(
-                                                  value: value,
-                                                  child: Text(value.faculties));
-                                            }).toList(),
-                                            onChanged: (DropDownItems? value) {
-                                              setState(() {
-                                                selectedFaculty = value;
-                                                print(
-                                                    selectedFaculty?.faculties);
-                                              });
-                                            }),
+                                        child: DropdownButton<String>(
+                                          isExpanded: true,
+                                          hint: Text(dept[0]),
+                                          value: selFaculty,
+                                          onChanged: (String? newvalue) {
+                                            setState(() {
+                                              selFaculty = newvalue!;
+                                              print("this is ${selFaculty}");
+                                            });
+                                          },
+                                          items: dept
+                                              .map<DropdownMenuItem<String>>(
+                                                  (String myvalue) {
+                                            return DropdownMenuItem(
+                                                value: myvalue,
+                                                child: Text(myvalue));
+                                          }).toList(),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(height: 20),
@@ -373,29 +383,9 @@ class _EditProfileState extends State<EditProfile> {
                               : (mainUser.function == 1)
                                   ? Column(
                                       children: [
-                                        CheckboxListTile(
-                                            controlAffinity:
-                                                ListTileControlAffinity.leading,
-                                            activeColor: Colors.orange,
-                                            title: Text("One"),
-                                            value: val,
-                                            onChanged: (val) {
-                                              setState(() {
-                                                val = val!;
-                                              });
-                                            }),
-                                        SizedBox(height: 10),
-                                        CheckboxListTile(
-                                            controlAffinity:
-                                                ListTileControlAffinity.leading,
-                                            activeColor: Colors.orange,
-                                            title: Text("One"),
-                                            value: val,
-                                            onChanged: (val) {
-                                              setState(() {
-                                                val = val!;
-                                              });
-                                            }),
+                                        ...studies
+                                            .map(buildSingleCheckBox)
+                                            .toList(),
                                       ],
                                     )
                                   : Text("Admin"),
@@ -408,6 +398,13 @@ class _EditProfileState extends State<EditProfile> {
                               primary: Colors.orange,
                             ),
                             onPressed: () async {
+                              if (listfaculty.isEmpty) {
+                                listfaculty.add(selFaculty);
+                              } else {
+                                listfaculty.clear();
+                                listfaculty.add(selFaculty);
+                              }
+
                               if (_formKey.currentState!.validate()) {
                                 await DatabaseService(uid: launcher.uid)
                                     .updateUserData(
@@ -419,7 +416,7 @@ class _EditProfileState extends State<EditProfile> {
                                         school,
                                         userAvatar,
                                         messageTime,
-                                        faculty,
+                                        listfaculty,
                                         courses);
                                 Navigator.pop(context);
                               }

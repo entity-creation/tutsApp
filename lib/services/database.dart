@@ -19,6 +19,11 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('User');
   final CollectionReference idRef =
       FirebaseFirestore.instance.collection('UserId');
+  final DocumentReference<Map<String, dynamic>> courseData =
+      FirebaseFirestore.instance.collection("course").doc("Departments");
+  final DocumentReference deptData = FirebaseFirestore.instance
+      .collection("departments")
+      .doc("allDepartments");
 
   Future updateUserData(
       String uid,
@@ -47,6 +52,16 @@ class DatabaseService {
 
   Future uploadIds(String userId) async {
     await idRef.doc(uid).set({"userId": userId});
+  }
+
+  Future uploadCourse(String course) async {
+    List courses = [course];
+    await courseData.update({"courses": FieldValue.arrayUnion(courses)});
+  }
+
+  Future uploadDept(String dept) async {
+    List depts = [dept];
+    await deptData.update({"departments": FieldValue.arrayUnion(depts)});
   }
 
   //User data from snapshot
