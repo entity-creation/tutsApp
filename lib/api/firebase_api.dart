@@ -46,12 +46,21 @@ class FirebaseApi {
           .snapshots()
           .transform(Utils.transformer(Message.fromJson));
 
-  static Stream<List<Dept>> getDept() => FirebaseFirestore.instance
-      .collection("departments")
-      .doc("allDepartments")
-      .collection("courses")
-      .snapshots()
-      .transform(Utils.transformer(Dept.fromJson));
+  static Stream<Dept> getDept() {
+    return FirebaseFirestore.instance
+        .collection("departments")
+        .doc("allDepartments")
+        .snapshots()
+        .map(Dept.fromJson);
+  }
+
+  static Stream<Courses> getCourse() {
+    return FirebaseFirestore.instance
+        .collection("course")
+        .doc("Departments")
+        .snapshots()
+        .map(Courses.fromJson);
+  }
 
   static Future addRandomUsers(List<MainUser> users) async {
     final refUsers = FirebaseFirestore.instance.collection('User');

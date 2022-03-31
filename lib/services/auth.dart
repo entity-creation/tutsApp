@@ -54,9 +54,7 @@ class AuthService {
           gender,
           school,
           'image',
-          DateTime.utc(2000),
-          ['Physics', 'Chemistry', 'Biology'],
-          ['Physics', 'Chemistry', 'Biology']);
+          DateTime.utc(2000), [], []);
 
       return _userFromFirebaseUser(user);
     } catch (e) {

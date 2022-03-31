@@ -24,9 +24,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<Tester?>.value(
-      value: AuthService().user,
-      initialData: null,
+    return MultiProvider(
+      providers: [
+        StreamProvider<Tester?>.value(
+          value: AuthService().user,
+          initialData: null,
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Wrapper(

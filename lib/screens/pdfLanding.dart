@@ -51,12 +51,12 @@ class _PdfLandingState extends State<PdfLanding> {
                       ),
                     );
                   }
-                  return Center(
-                    child: Text(
-                      "No material uploaded",
-                      style: TextStyle(color: Colors.orange),
-                    ),
-                  );
+                  return Container(
+                      // child: Text(
+                      //   "No material uploaded",
+                      //   style: TextStyle(color: Colors.orange),
+                      // ),
+                      );
                 });
           } else {
             print(snapshot.error);
